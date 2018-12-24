@@ -20,7 +20,7 @@ The bot greets you and asks you what do you want to learn (or talk) about.
 ## Example (planned) conversation
 > -- Hi, I will be your MathChatBot for today. What subject are you interested in? <br />
 > -- I want to *learn* about **derivatives**. <br />
-> -- Would you like me to *define* the **derivatives** for you? <br />  
+> -- Would you like me to *define* the **derivatives** for you? 
 > -- Yes. <br />
 > -- [insert definition of derivative from WN here]. <br />
 > Anything else?
