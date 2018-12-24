@@ -23,7 +23,7 @@ The bot greets you and asks you what do you want to learn (or talk) about.
 > -- Would you like me to *define* the **derivatives** for you? 
 > -- Yes. <br />
 > -- [insert definition of derivative from WN here]. <br />
-> Anything else?
+> Anything else? <br />
 > -- I would like to *practice* some **derivatives** **exercises**. <br />
 > -- Well, then you should definitely check out some **exercises** in your course textbook.
 > Anything else? <br />
