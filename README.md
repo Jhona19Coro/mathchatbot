@@ -18,22 +18,22 @@ The bot greets you and asks you what do you want to learn (or talk) about.
 - Corresponding to the VP and NP, it will offer predefined answers.
 
 ## Example (planned) conversation
-> -- Hi, I will be your MathChatBot for today. What subject are you interested in?
-> -- I want to *learn* about **derivatives**.
-> -- Would you like me to *define* the **derivatives** for you?
-> -- Yes.
-> -- [insert definition of derivative from WN here].
+> -- Hi, I will be your MathChatBot for today. What subject are you interested in? <br />
+> -- I want to *learn* about **derivatives**. <br />
+> -- Would you like me to *define* the **derivatives** for you? <br />  
+> -- Yes. <br />
+> -- [insert definition of derivative from WN here]. <br />
 > Anything else?
-> -- I would like to *practice* some **derivatives** **exercises**.
+> -- I would like to *practice* some **derivatives** **exercises**. <br />
 > -- Well, then you should definitely check out some **exercises** in your course textbook.
-> Anything else?
-> -- I would like to *read* about **exponentials**.
-> -- Do you mean (1) [one sense of the exponential] or (2) [second sense]?
-> -- 1.
+> Anything else? <br />
+> -- I would like to *read* about **exponentials**. <br />
+> -- Do you mean (1) [one sense of the exponential] or (2) [second sense]? <br />
+> -- 1. <br />
 > -- You can check out some materials on Wikipedia or even better, in your course textbook.
-> Anything else?
-> -- No, thanks.
-> -- OK, bye!
+> Anything else? <br />
+> -- No, thanks. <br />
+> -- OK, bye! <br />
 
 ## Further features (F) and ideas (I)
 - (F) The bot will save the transcript in a text file.
