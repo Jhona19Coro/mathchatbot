@@ -54,7 +54,7 @@ The bot greets you and asks you what do you want to learn (or talk) about.
 > I can give you the definition of group. <br />
 > I know 2 definitions of group. <br />
 > Here is one of them: <br />
-> > Definition: any number of entities (members) considered as a unit <br />
+> &gt; Definition: any number of entities (members) considered as a unit <br />
 > Is this what you were after? <br />
 > --> yes <br />
 > Great then! <br />
