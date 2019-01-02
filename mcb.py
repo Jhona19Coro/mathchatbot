@@ -5,6 +5,7 @@
 # Disclaimer: There are a lot of elementary hacks here, I know.
 #             But I had fun making it and that's what I care about.
 ###############################################################################
+import replies as r              # predefined replies
 import time                      # for keeping progress
 import sys                       # for writing the log in a variable file
 import os                        # no transcript wanted, write it and trash it
@@ -108,38 +109,14 @@ wndb = [
 polyw = [wndb[j] for j in range(0, 7)]
 wndbNames = [s.lemmas()[0].name() for s in wndb]
 
-# Predefined replies
-more = 'What else do you want to talk about?'
-practice = 'Practice makes perfect, you know?'
-notu = "Sorry, I don't understand. Could you try something else, please?"
-he = 'Hi, how can I help you today?'
-leave = 'You can always end the conversation saying goodbye.'
-topics = "Here are the topics I know something about:"
-
-# By verb
-studyR1 = "I'm sure there are many resources you can check out. " + \
-    "You can start by reading some Wikipedia."
-studyR2 = "You should start by reading from the course textbook."
-studyR3 = "Reading your course notes is always a good start."
-studyR4 = "You can get together with some colleagues and try studying " + \
-    "through discussions and debates if that works for you."
-studyR5 = "Set aside at least 30 minutes each day and read through your notes."
-studyReplies = [studyR1, studyR2, studyR3, studyR4, studyR5]
-practiceR1 = "You can always start with the exercises in the textbook."
-practiceR2 = "First, read the theory, then try solving some exercises " + \
-    "in the textbook. See how that works for you."
-practiceR3 = "You can find some good exercises on Project Euler."
-practiceR4 = "Get a list of exercises from you professor and try " + \
-    "solving those first."
-practiceR5 = "It's always a good idea to start by reading the theory, though."
-practiceReplies = [practiceR1, practiceR2, practiceR3, practiceR4, practiceR5]
-
 
 # Conversation
-print(he)
-print(topics)
-mcb.write(he + "\n")
-mcb.write(topics + "\n")
+greeting = random.choice(r.he)
+subj = random.choice(r.topics)
+print(greeting)
+print(subj)
+mcb.write(str(greeting) + "\n")
+mcb.write(str(subj) + "\n")
 for topic in mwords:
     print(topic)
     mcb.write(topic + "\n")
@@ -152,8 +129,9 @@ print(mverbs[-1], end=" } ")
 mcb.write(mverbs[-1] + " } ")
 print("some of these.")
 mcb.write("some of these.\n")
-print(leave)
-mcb.write(leave + "\n")
+gb = random.choice(r.leave)
+print(gb)
+mcb.write(str(gb) + "\n")
 reply = str(input("--> "))
 mcb.write("--> " + reply + "\n")
 
@@ -168,9 +146,13 @@ while ('BYE' not in reply.upper()):
              or "NP" in parts.get(part)]
     nounsUpper = [n.upper() for n in nouns]
     while (not verbs and not nouns):
-        print(notu)
-        print(leave)
+        nun = random.choice(r.notu)
+        bye = random.choice(r.leave)
+        print(nun)
+        print(bye)
         reply = str(input("--> "))
+        mcb.write(str(nun) + "\n")
+        mcb.write(str(bye) + "\n")
         mcb.write("--> " + reply + "\n")
     # Make list of all senses of the NOUNS in the reply
     nounSenses = [nn for noun in nouns for nn in wn.synsets(noun)]
@@ -180,98 +162,108 @@ while ('BYE' not in reply.upper()):
                     nounSenses for word in wndb}
     # Store (nonzero) similarity scores separately, to get max
     nounSimsLs = [k for k in nounSimsDict.keys() if k]
-    theNounSS = nounSimsDict[max(nounSimsLs)]
-    theNounSSLemma = nounSimsDict[max(nounSimsLs)].lemmas()[0]
-    theNounName = theNounSSLemma.name()
-    theNounDef = nounSimsDict[max(nounSimsLs)].definition()
     ans = False
-    if ('LEARN' in verbsUpper or 'STUDY' in verbsUpper):
-        print('So, you want to learn about ' + theNounName +
-              ' or something related.')
-        mcb.write('So, you want to learn about ' + theNounName +
-                  ' or something related.' + "\n")
-        print(random.choice(studyReplies))
-        mcb.write(random.choice(studyReplies) + "\n")
-        ans = True
-    if ('EXERCISE' in verbsUpper or 'PRACTICE' in verbsUpper
-       or 'EXERCISE' in nounsUpper or 'PRACTICE' in nounsUpper):
-        mcb.write(practice + "\n")
-        mcb.write(random.choice(practiceReplies) + "\n")
-        print(practice)
-        print(random.choice(practiceReplies))
-        ans = True
-    if 'READ' in verbsUpper:
-        print('There are great resources for reading about ' +
-              theNounName + ' and related stuff.')
-        mcb.write('There are great resources for reading about ' +
-                  theNounName + ' and related stuff.\n')
-        print(random.choice(studyReplies))
-        mcb.write(random.choice(studyReplies) + "\n")
-        ans = True
-    if ('DEFINE' in verbsUpper or 'DEFINITION' in nounsUpper):
-        print('I can give you the definition of ' + theNounName + '.')
-        mcb.write('I can give you the definition of ' + theNounName + '.\n')
-        if theNounSS not in polyw:
-            print("Here it is: ")
-            mcb.write("Here it is: \n")
-            print('> Definition: ' + theNounDef)
-            mcb.write('> Definition: ' + theNounDef + "\n")
-        else:
-            # If polysemantic,
-            # find which one of them it is
-            senses = []
-            for poly in polyw:
-                if poly.lemmas()[0].name() == theNounSS.lemmas()[0].name():
-                    senses.append(poly)
-            print("I know " + str(len(senses)) + " definitions of " +
-                  theNounName + ".")
-            mcb.write("I know " + str(len(senses)) + " definitions of " +
-                      theNounName + ".\n")
-            count = 0
-            mcb.write('Here is one of them:\n')
-            print('Here is one of them: ')
-            print('> Definition: ' + senses[count].definition())
-            mcb.write('> Definition: ' + senses[count].definition() + "\n")
-            count += 1
-            print("Is this what you were after?")
-            mcb.write("Is this what you were after?\n")
-            yn = str(input("--> "))
-            mcb.write("--> " + yn + "\n")
-            while ("YES" not in yn.upper()
-                   and "NO" not in yn.upper()):
-                mcb.write("Please answer 'yes' or 'no'\n")
-                print("Please answer 'yes' or 'no'")
+    if nounSimsLs:
+        theNounSS = nounSimsDict[max(nounSimsLs)]
+        theNounSSLemma = nounSimsDict[max(nounSimsLs)].lemmas()[0]
+        theNounName = theNounSSLemma.name()
+        theNounDef = nounSimsDict[max(nounSimsLs)].definition()
+        if ('LEARN' in verbsUpper or 'STUDY' in verbsUpper):
+            print('So, you want to learn about ' + theNounName +
+                  ' or something related.')
+            mcb.write('So, you want to learn about ' + theNounName +
+                      ' or something related.' + "\n")
+            studyR = random.choice(r.studyReplies)
+            print(studyR)
+            mcb.write(str(studyR) + "\n")
+            ans = True
+        if ('EXERCISE' in verbsUpper or 'PRACTICE' in verbsUpper
+           or 'EXERCISE' in nounsUpper or 'PRACTICE' in nounsUpper):
+            practiceRs = random.choice(r.practiceLs)
+            practiceR = random.choice(r.practiceReplies)
+            mcb.write(str(practiceRs) + "\n")
+            mcb.write(str(practiceR) + "\n")
+            print(practiceRs)
+            print(practiceR)
+            ans = True
+            if 'READ' in verbsUpper:
+                print('There are great resources for reading about ' +
+                      theNounName + ' and related stuff.')
+                mcb.write('There are great resources for reading about ' +
+                          theNounName + ' and related stuff.\n')
+            studyR = random.choice(r.studyReplies)
+            print(studyR)
+            mcb.write(str(studyR) + "\n")
+            ans = True
+        if ('DEFINE' in verbsUpper or 'DEFINITION' in nounsUpper):
+            print('I can give you the definition of ' + theNounName + '.')
+            mcb.write('I can give you the definition of ' +
+                      theNounName + '.\n')
+            if theNounSS not in polyw:
+                print("Here it is: ")
+                mcb.write("Here it is: \n")
+                print('> Definition: ' + theNounDef)
+                mcb.write('> Definition: ' + theNounDef + "\n")
+            else:
+                # If polysemantic,
+                # find which one of them it is
+                senses = []
+                for poly in polyw:
+                    if poly.lemmas()[0].name() == theNounSS.lemmas()[0].name():
+                        senses.append(poly)
+                print("I know " + str(len(senses)) + " definitions of " +
+                      theNounName + ".")
+                mcb.write("I know " + str(len(senses)) + " definitions of " +
+                          theNounName + ".\n")
+                count = 0
+                mcb.write('Here is one of them:\n')
+                print('Here is one of them: ')
+                print('> Definition: ' + senses[count].definition())
+                mcb.write('> Definition: ' + senses[count].definition() + "\n")
+                count += 1
+                print("Is this what you were after?")
+                mcb.write("Is this what you were after?\n")
                 yn = str(input("--> "))
                 mcb.write("--> " + yn + "\n")
-            if ("YES" in yn.upper()):
-                mcb.write("Great then!\n")
-                print("Great then!")
-            while ("NO" in yn.upper()):
-                if count < len(senses):
-                    print('Here is another one: ')
-                    mcb.write("Here is another one:\n")
-                    print('> Definition: ' + senses[count].definition())
-                    mcb.write('> Definition: ' + senses[count].definition() +
-                              "\n")
-                    count += 1
-                    print("Is this what you were after?")
-                    mcb.write("Is this what you were after?\n")
+                while ("YES" not in yn.upper()
+                       and "NO" not in yn.upper()):
+                    mcb.write("Please answer 'yes' or 'no'\n")
+                    print("Please answer 'yes' or 'no'")
                     yn = str(input("--> "))
                     mcb.write("--> " + yn + "\n")
-                else:
-                    print('I know no further, sorry.')
-                    mcb.write('I know no further, sorry.\n')
-                    break
-        ans = True
+                if ("YES" in yn.upper()):
+                    mcb.write("Great then!\n")
+                    print("Great then!")
+                while ("NO" in yn.upper()):
+                    if count < len(senses):
+                        print('Here is another one: ')
+                        mcb.write("Here is another one:\n")
+                        print('> Definition: ' + senses[count].definition())
+                        mcb.write('> Definition: ' + senses[count].definition()
+                                  + "\n")
+                        count += 1
+                        print("Is this what you were after?")
+                        mcb.write("Is this what you were after?\n")
+                        yn = str(input("--> "))
+                        mcb.write("--> " + yn + "\n")
+                    else:
+                        print('I know no further, sorry.')
+                        mcb.write('I know no further, sorry.\n')
+                        break
+            ans = True
     if not ans:
-        print(notu)
-        print(leave)
-        mcb.write(notu + "\n")
-        mcb.write(leave + "\n")
-    print(more)
-    print(leave)
-    mcb.write(more + "\n")
-    mcb.write(leave + "\n")
+        nun = random.choice(r.notu)
+        gb = random.choice(r.leave)
+        print(nun)
+        print(gb)
+        mcb.write(str(nun) + "\n")
+        mcb.write(str(gb) + "\n")
+    mai = random.choice(r.more)
+    gb = random.choice(r.leave)
+    print(mai)
+    print(gb)
+    mcb.write(str(mai) + "\n")
+    mcb.write(str(gb) + "\n")
     reply = str(input("--> "))
     mcb.write("--> " + reply + "\n")
 
