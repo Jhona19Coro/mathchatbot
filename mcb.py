@@ -16,13 +16,13 @@ from nltk.tag.stanford import StanfordPOSTagger
 
 
 # Setup POS Tagger
-cale_model = "/home/t3rtius/Documents/cs/sla-master/sem1/1-nlp-opt/" + \
-    "stanford-pos-tagger/stanford-postagger-full-2018-10-16/" + \
-    "models/english-bidirectional-distsim.tagger"
-cale_jar_tagger = "/home/t3rtius/Documents/cs/sla-master/sem1/1-nlp-opt/" + \
-    "stanford-pos-tagger/stanford-postagger-full-2018-10-16/" + \
-    "stanford-postagger.jar"
-tagger = StanfordPOSTagger(cale_model, cale_jar_tagger)
+# Define las rutas al modelo y al archivo JAR del etiquetador de partes del habla de Stanford
+base_path = "C:/Users/USER/Desktop/mathchatbot-master/"
+model_path = os.path.join(base_path, "stanford-postagger-full-2018-10-16/models/english-bidirectional-distsim.tagger")
+jar_path = os.path.join(base_path, "stanford-postagger-full-2018-10-16/stanford-postagger.jar")
+
+# Inicializa el etiquetador de partes del habla de Stanford
+tagger = StanfordPOSTagger(model_path, jar_path)
 
 # log file
 if len(sys.argv) != 2:
